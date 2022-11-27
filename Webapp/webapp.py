@@ -611,9 +611,9 @@ def page5():
     
 
 page_names_to_funcs = {
-    "Overview":page3 ,
+    "Overview":main_page ,
     "Data preprocess/discovery": page2,
-    "Improve your article": main_page,
+    "Improve your article": page3,
     "Machine learning/ Deep learning": page4,
     "Predict your success": page5,
 }
