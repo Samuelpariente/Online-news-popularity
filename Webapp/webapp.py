@@ -18,7 +18,7 @@ from sklearn.decomposition import PCA
 import bar_chart_race as bcr
 import base64
 
-v_news = pd.read_csv('v_news.csv')
+v_news = pd.read_csv('Webapp/v_news.csv')
 i = 0
 def couleur(*args, **kwargs):
         global i 
