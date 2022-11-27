@@ -5,5 +5,5 @@ plotly
 wordcloud
 pillow
 numpy
-sklearn
+scikit-learn
 bar_chart_race
