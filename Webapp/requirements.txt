@@ -7,3 +7,4 @@ pillow
 numpy
 scikit-learn
 bar_chart_race
+ffmpeg-python
