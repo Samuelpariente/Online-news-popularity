@@ -40,7 +40,7 @@ if online  == False:
     v_news = 'v_news.csv'
     multiTimeline='multiTimeline.csv'
     Mlogo = 'Mlogo.png'
-    c= 'OnlineNewsPopularityWithAutorsAndTitles.csv'
+    OnlineNewsPopularityWithAutorsAndTitles= 'OnlineNewsPopularityWithAutorsAndTitles.csv'
 
 v_news = pd.read_csv(v_news)
 i = 0
