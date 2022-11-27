@@ -39,7 +39,7 @@ def main_page():
     We scapped with selenium from mashable Authors and titles: 
     
     """
-    news = pd.read_csv('OnlineNewsPopularityWithAutorsAndTitles.csv')
+    news = pd.read_csv('Webapp/OnlineNewsPopularityWithAutorsAndTitles.csv')
     news[['Autors','titles']]
     """
     To that we add the number of visits by day with google trends:
@@ -51,7 +51,7 @@ def main_page():
     Moreover we had 2 qualitatives columns: Week days and Types of news. We decided to let week day in  One hot encoding and to vectorise chanel thank to a Google news vectorisation model. 
     
     """
-    image = Image.open('illustration1.PNG')
+    image = Image.open('Webapp/illustration1.PNG')
     st.image(image, caption='Vectorisation')
     
     """
@@ -113,7 +113,7 @@ def page2():
         for y in x.split(' '):
             words.append(y)
     text = ' '.join(words)
-    mask = np.array(Image.open('Mlogo.png'))
+    mask = np.array(Image.open('Webapp/Mlogo.png'))
     mask[mask == 0] = 255
     wordcloud = WordCloud(background_color = 'white', max_words = 200, mask =mask,contour_width=1).generate(text)
     
