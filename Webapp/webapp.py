@@ -44,7 +44,7 @@ def main_page():
     """
     To that we add the number of visits by day with google trends:
     """
-    timeline = pd.read_csv('multiTimeline.csv')
+    timeline = pd.read_csv('Webapp/multiTimeline.csv')
     timeline
     
     """
