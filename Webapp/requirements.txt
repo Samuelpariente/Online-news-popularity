@@ -3,7 +3,7 @@ pandas
 matplotlib
 plotly
 wordcloud
-PIL
+pillow
 numpy
 sklearn
 bar_chart_race
