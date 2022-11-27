@@ -24,6 +24,8 @@ from bokeh.palettes import YlOrRd9
 from bokeh.palettes import Greens9
 from bokeh.palettes import Purples9
 
+import statsmodels.api as sm
+
 online = True
 
 if online== True: 
