@@ -1,0 +1,10 @@
+requests
+pandas
+matplotlib
+plotly
+wordcloud
+PIL
+numpy
+sklearn
+bar_chart_race
+base64
