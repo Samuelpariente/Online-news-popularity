@@ -7,4 +7,3 @@ pillow
 numpy
 sklearn
 bar_chart_race
-base64
