@@ -63,7 +63,7 @@ def main_page():
     We scapped with selenium from mashable Authors and titles: 
     
     """
-    news = pd.read_csv(OnlineNewsPopularityWithAutorsAndTitles.csv)
+    news = pd.read_csv(OnlineNewsPopularityWithAutorsAndTitles)
     news[['Autors','titles']]
     """
     To that we add the number of visits by day with google trends:
