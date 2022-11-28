@@ -33,7 +33,7 @@ from bokeh.plotting import figure, show
 
 from collections import OrderedDict
 
-online = True
+online = False
 
 if online== True: 
     illustration1 = 'Webapp/illustration1.PNG'
@@ -41,6 +41,7 @@ if online== True:
     multiTimeline='Webapp/multiTimeline.csv'
     Mlogo = 'Webapp/Mlogo.png'
     OnlineNewsPopularityWithAutorsAndTitles= 'Webapp/OnlineNewsPopularityWithAutorsAndTitles.csv'
+    race = "Webapp/race.mp4"
     
 if online  == False: 
     illustration1 = 'illustration1.PNG'
@@ -48,6 +49,7 @@ if online  == False:
     multiTimeline='multiTimeline.csv'
     Mlogo = 'Mlogo.png'
     OnlineNewsPopularityWithAutorsAndTitles= 'OnlineNewsPopularityWithAutorsAndTitles.csv'
+    race = "Race.mp4"
 
 v_news = pd.read_csv(v_news)
 i = 0
@@ -294,6 +296,8 @@ def page2():
     fig = px.sunburst(autnb, path=['Authors'], values = 'Titles',title = "TOP 10 des acteurs ayant joué dans le plus de genres différents")
     st.plotly_chart(fig)
     
+    
+    
     words = []
     
     for x in v_news['Titles']:
@@ -369,54 +373,9 @@ def page2():
     This section Echos to the TOP 10 most prolific authors seen in the univariate section of the visualization. In fact, here we show the evolution over time of the authors having the most shares. As you can see the race is pretty stacked 🛫
     """
     
-    top_10_authors = v_news.groupby(by="Authors").shares.sum().sort_values(ascending=False).head(10).index.values
     
-    top_10_authors_race = v_news[v_news["Authors"].isin(top_10_authors)].reset_index(drop=True)[["Authors", "shares", "date"]]
-    temp_date = pd.to_datetime(top_10_authors_race["date"]).dt.strftime('%m/%Y')
-    top_10_authors_race["date"] = pd.to_datetime(temp_date)
     
-    table_top_10_authors_race = pd.pivot_table(top_10_authors_race, 
-                                               index="Authors", 
-                                               columns="date", 
-                                               values="shares", 
-                                               aggfunc="sum").fillna(0).cumsum(axis=1)
-    table_top_10_authors_race = table_top_10_authors_race.T 
-    
-    html_str = bcr.bar_chart_race(
-        df=table_top_10_authors_race,
-        #filename='covid19_horiz.mp4',
-        orientation='h',
-        sort='desc',
-        n_bars=10,
-        fixed_order=False,
-        fixed_max=True,
-        steps_per_period=2,
-        interpolate_period=False,
-        label_bars=True,
-        bar_size=.95,
-        period_label={'x': .99, 'y': .25, 'ha': 'right', 'va': 'center'},
-        period_fmt='%Y',
-        period_summary_func=lambda v, r: {'x': .99, 'y': .18,
-                                          's': f'Nombre total de partages: {v.nlargest(6).sum():,.0f}',
-                                          'ha': 'right', 'size': 8, 'family': 'Courier New'},
-        perpendicular_bar_func='median',
-        period_length=150,
-        figsize=(5, 3),
-        dpi=144,
-        cmap='dark12',
-        title='TOP 10 most influencial authors of Mashable over time',
-        title_size='',
-        bar_label_size=7,
-        tick_label_size=7,
-        writer=None,
-        fig=None,
-        bar_kwargs={'alpha': .7},
-        filter_column_colors=False).data
-    
-    start = html_str.find('base64,')+len('base64,')
-    end = html_str.find('">')
-    
-    video = base64.b64decode(html_str[start:end])
+    video = open(race, 'rb').read()
     st.video(video)
     
     """
