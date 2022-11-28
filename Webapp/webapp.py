@@ -24,8 +24,6 @@ from bokeh.palettes import YlOrRd9
 from bokeh.palettes import Greens9
 from bokeh.palettes import Purples9
 
-import statsmodels.api as sm
-
 online = True
 
 if online== True: 
@@ -51,35 +49,156 @@ def couleur(*args, **kwargs):
             return "rgb(255, 0, 0)" 
         if i > 10:
             return "rgb(0, 0, 0)"
+def library():
+    st.markdown("# Libraries ")
+    """
+    In this section we load all the libraries we need for the notebook to be working properly. Here is the extensive list of utilized libraries :
 
+    - **Data Analysis libraries** :
+      - Datetime
+      - Numpy
+      - Pandas 
+      - Missingno
+    
+    - **Visualization libraries** :
+      - Seaborn
+      - Matplotlib
+      - Bokeh
+      - Plotly
+      - Wordcloud 
+      - BarChartRace
+    
+    - **Machine and Deep Learning libraries** :
+      - Sklearn 
+      - Auto-Sklearn
+      - Tensorflow
+    
+    - **Scrapping libraries** :
+      - Selenium
+    
+    - **Api libraries**
+      - Flask
+      - Pickle
+    
+    - **Date Storage related libraries** :
+      - Google Colab to Google Drive linkage 
+    """
+    
 def main_page():
     st.markdown("# Overview ")
     st.sidebar.markdown("# Overview")
+    st.markdown("## Datasets ")
     """
-    ## Dataset Description
-    This dataset summarizes a heterogeneous set of features about articles published by Mashable in a period of two years. 
-    The articles were published by Mashable (www.mashable.com) and their content as the rights to reproduce it belongs to them. Hence, this dataset does not share the original content but some statistics associated with it. Acquisition date: January 8, 2015.
-    
-    We scapped with selenium from mashable Authors and titles: 
-    
+    In the context of our project we studied the online-news-popularity dataset of mashable articles. Our project contains 2 csv datasets loaded in this section :
+
+    - **Online News Popularity Dataset**
+      - 63 columns | 39644 rows
+      - Base dataset 
     """
     news = pd.read_csv(OnlineNewsPopularityWithAutorsAndTitles)
-    news[['Autors','titles']]
+    news
     """
-    To that we add the number of visits by day with google trends:
+    
+    - **Timeline Dataset**
+      - 2 columns | 103 rows
+      - Contains "Mashable.com" internet user's flow for 103 dates 
+    
     """
+
     timeline = pd.read_csv(multiTimeline)
     timeline
     
+    st.markdown("## Data Pre-processing ")
     """
-    Moreover we had 2 qualitatives columns: Week days and Types of news. We decided to let week day in  One hot encoding and to vectorise chanel thank to a Google news vectorisation model. 
+    In the prepocessing section, our objective in to make the data usable for visualisation and modeling usage.To do so, we have to perform multiple modifications on the dataset. Find the complete explanation below.
+
+    ****
     
+    1. **Scrapping and Addition of columns**
+      - Using Selenium we add the title of each article and its author.
+      - We also convert the "timedelta" to the actual release date of the article and put it in a new column.
+      - We merge "timeline" dataset and "news" dataset in a new column.
+      - We create a discretized version of the target column (shares) : a binary discretization and a multi class one.
+    """
+    code = """ 
+urls = news["url"]
+driver = webdriver.Chrome('chromedriver.exe')
+
+driver.get(urls[0])
+time.sleep(2)
+element = driver.find_elements(by = By.CSS_SELECTOR, value = 'div[id="onetrust-button-group"]')
+element[0].click()
+authors = []
+titles = []
+
+authors = []
+titles = []
+for i in range(0, len(urls[i])):
+    driver.get(urls[i])
+    time.sleep(0.5)
+    try : 
+        timer1 = WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.CSS_SELECTOR,'a[class="underline-link"]')))
+        timer2 = WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.CSS_SELECTOR,'h1[class="mt-4 header-100 max-w-5xl "]')))
+        name = driver.find_elements(by = By.CSS_SELECTOR, value = 'a[class="underline-link"]')
+        title = driver.find_elements(by = By.CSS_SELECTOR, value = 'h1[class="mt-4 header-100 max-w-5xl "]')
+
+        authors.append(name[0].text)
+        titles.append(title[0].text)
+
+    except (TimeoutException , NameError):
+        authors.append('Nan')
+        titles.append('Nan')
+news['Autors'] = authors
+news['titles'] = titles
+df.to_csv('OnlineNewsPopularityWithAutorsAndTitles.csv')
+    """
+    st.code(code, language="python")
+    
+    
+    """
+    ****
+    
+    2. **Cleaning**
+      - We perform a "Na" values study and notice that our dataset doesn't contains any trivial "na" values.
+      - *Columns 2 to 6 (Tokens related)* : we verify that ratios columns are between 0 and 1. We check as well if articles have a content or not.
+      - *Colummns 13 to 18 (Chanels)* : In anticipation of the vectorization we decode the 1 hot encoding and create a new qualitive column.
+      - *Columns 19 to 27 (Keywords)* : Given that Keywords related columns represent numbers of shares, we verify their non-negativity.
+      - *Columns 31 to 37 (Day of the week)* : In a similary fashion as chanels columns, we decode the 1 hot encoding to make it a new qualitative column.
+      - *Columns 39 to 43 (LDA topics)* : These columns are ratio. Thus, we verify that they all lie between 0 and 1.
+      - *Columns 61 to 62 (Title and Author)* : We must verify the completeness of these scrapped columns. In fact we find out that 619 columns are "Nan". We suppress them because it is only a small proportion of the dataset.
+    
+    ***
+    
+    3. **Outlier Handling**
+      - We decide to select the columns of the dataset for which "shares" columns lie between first and third quartiles of the dataset.
+    
+    """
+    col1, col2 = st.columns(2)
+    col1.metric(label="Dropped outliers", value="4457")
+    col2.metric(label="news rows", value="33386", delta = "-11.7%")
+    
+    """
+    ***
+    
+    4. **Vectorization**
+      - First, we load a google vectorization model pre-trained on online articles.
+      - Then we vectorize our chanel column using this model.
+      - However, the output of the model is a 300 dimensional vector which perturbates learning of models, especially deep learning sequential ones. Thus, we compute a PCA on this output vector and transform it to a 5 dimensional vector that we can concatenate with our pre-existing dataset.
     """
     image = Image.open(illustration1)
     st.image(image, caption='Vectorisation')
     
     """
-    We finished with 3 predictable Variables:
+    ***
+    
+    5. **Creation of the working dataframes**
+      - We create 2 dataframes to work with. 
+      - The first one is the visualization dataframe, "v_news". It doesn't contain 1 hot encoded variables, or vectorized ones. 
+      - The second one, named "m_news" and created for modeling purposes, has only numerical columns, encompassing vectorized and 1 hot encoded columns. In addition, we remove non predictive columns from it, such as timedelta. Finally, we only keep columns that are less than 70% percent correlated with others.
+
+    
+    
+    6. **3 predictable Variables**
     """
 
     fig = px.histogram(v_news, x="Class_shares1")
@@ -616,6 +735,7 @@ page_names_to_funcs = {
     "Improve your article": page3,
     "Machine learning/ Deep learning": page4,
     "Predict your success": page5,
+    "Libraries": library
 }
 
 selected_page = st.sidebar.selectbox("Select a page", page_names_to_funcs.keys())
