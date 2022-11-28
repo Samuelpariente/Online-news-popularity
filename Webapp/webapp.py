@@ -18,11 +18,20 @@ from sklearn.decomposition import PCA
 import bar_chart_race as bcr
 import base64
 import seaborn as sns
+
+from bokeh.palettes import Spectral5
+from bokeh.palettes import PRGn7
 from bokeh.palettes import Magma7
+from bokeh.palettes import Viridis
 from bokeh.palettes import Pastel2_7
-from bokeh.palettes import YlOrRd9
-from bokeh.palettes import Greens9
 from bokeh.palettes import Purples9
+from bokeh.palettes import Greens9
+from bokeh.palettes import YlOrRd9
+from bokeh.transform import factor_cmap, transform
+from bokeh.models import ColumnDataSource
+from bokeh.plotting import figure, show
+
+from collections import OrderedDict
 
 online = True
 
@@ -217,9 +226,39 @@ df.to_csv('OnlineNewsPopularityWithAutorsAndTitles.csv')
 def page2():
     st.markdown("# Data discovery ")
     st.sidebar.markdown("Data discovery ")
+    """
+    This section is dedicated to understanding how our data behaves through mutliple graphs. Our work in this part can be split in two categories :
+
+    - Univariate Visualization :
+      - Allows use to determine the behavior of our variables.
+      - Can act as a reference in the future and more in depth studies of this notebook.
     
+    - Multivariate Visualization :
+      - Permits to comprehend to what extent variables interact.
+      - Is the first to understanding the data troughoutly and finding the problematic of this project.
+      
+
+      """
+    st.markdown("##### Repartition of releases day through the week")
+    st.markdown("By analysing this plot, we notice that the **3 most common day of release** are <ins>Tuesday</ins>, <ins>Wednesday</ins> and <ins>Thursday</ins> while the 2 less common are <ins>Saturday</ins> and <ins>Sunday</ins>.", unsafe_allow_html=True)
+    week_ref = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    Weekday_counts = v_news.groupby(by="Weekday").Weekday.count().reindex(week_ref)
+    index = list(Weekday_counts.index)
+    values = list(Weekday_counts.values)
     
+    source = ColumnDataSource(data=OrderedDict(weekday=index, counts=values))
     
+    p = figure(x_range=index, y_range=(0, np.max(values)+1000), height=350, title="Release Day Frequencies",
+               toolbar_location=None, tools="hover", tooltips="@weekday: @counts")
+    
+    p.vbar(x='weekday', top='counts', width=0.9, source=source, 
+           line_color='white', fill_color=factor_cmap('weekday', palette=PRGn7, factors=index))
+    
+    p.xgrid.grid_line_color = None
+    st.bokeh_chart(p)
+
+    st.markdown("##### Repartition of Main topics amongst Mashable articles.")
+    st.markdown("The spiderplot bellow shows us the <ins>Business</ins>, <ins>World</ins>, <ins>Tech</ins> and <ins>Entertainement</ins> are the **4 most common topics** on Mashable.", unsafe_allow_html=True)
     chanel = v_news.groupby(by="Chanel").Chanel.count()
     
     fig = go.Figure(data=go.Scatterpolar(
@@ -243,13 +282,18 @@ def page2():
       showlegend=False
     )
     st.plotly_chart(fig)
-       
+    
+  
+    st.markdown("##### Most prolific authors")
+    st.markdown("The pie plow bellow shows the 10 most prolific Authors on Mashable.", unsafe_allow_html=True)
+    
     autnb = v_news.groupby('Authors').count()['Titles'].sort_values(ascending = False)[:10]
     autnb =autnb.reset_index()
     
     
     fig = px.sunburst(autnb, path=['Authors'], values = 'Titles',title = "TOP 10 des acteurs ayant joué dans le plus de genres différents")
     st.plotly_chart(fig)
+    
     words = []
     
     for x in v_news['Titles']:
@@ -260,22 +304,36 @@ def page2():
     mask[mask == 0] = 255
     wordcloud = WordCloud(background_color = 'white', max_words = 200, mask =mask,contour_width=1).generate(text)
     
-    
-    
+
     plt.subplots(figsize=(60, 20))
     plt.imshow(wordcloud.recolor(color_func = couleur))
     plt.imshow(wordcloud)
     plt.axis("off")
     st.set_option('deprecation.showPyplotGlobalUse', False)
-    st.markdown("## Most Frequent words ")
+    st.markdown("#### Most Frequent words ")
+    """
+    ##### Most common topics
+    In order to visualize the most common topics of articles, we studied the frequency of words in titles. We present it here as a word cloud. 
+
+    ❗ Notice that the 10 most frequent word are colored in red. Amongst them, we find **3 of the 5 GAFAM** and a famous social media, **twitter** ❗ 
+    """
     st.pyplot()
-    
+    """
+    Plotting all of our 62 variables wouldn't have been much insightfull. In this context, we chose to plot the totality of our quantitatives variables. We used these graphs as a reference during our work, in the event where we require the distribution of a specific variable.
+    """
     v_news.hist(figsize=(20,20))
-    
-    
-    st.markdown("## Univariate analisis of quantitative variables ")
     st.pyplot()
     
+    
+    """
+    This subsection aims at visualizing the proximity of articles depending on chanel to which they are related. Luckly, the dataset contains LDA (Latent Dirichlet Allocations) topics that can be used to evaluate the relative positions of 2 to n articles.
+
+    However, we have 4 LDA columns, meaning 4 LDA topics but we can only visualize data in 3 dimensions. Given that only the relative position of the points (articles) in the graph matters, we can compute a PCA to obtain a 3 dimensional graphic. 
+    
+    When selecting 3 components for the PCA, 84% of the data is explained which is higly satisfying..
+    
+    By looking at the graph, we can notice that the Chanel of an article (its general category) is certainly correlated to its Latent Dirichelet topics proximity. For instance, red points (business related articles) are somewhat from one another. The same goes for the other Chanels.
+    """
     lda = v_news.loc[:, "LDA_00":"LDA_04"]
     pca = PCA(n_components=3)
     pca.fit(lda)
@@ -307,7 +365,9 @@ def page2():
     st.plotly_chart(fig)
     
 
-    
+    """
+    This section Echos to the TOP 10 most prolific authors seen in the univariate section of the visualization. In fact, here we show the evolution over time of the authors having the most shares. As you can see the race is pretty stacked 🛫
+    """
     
     top_10_authors = v_news.groupby(by="Authors").shares.sum().sort_values(ascending=False).head(10).index.values
     
@@ -359,6 +419,11 @@ def page2():
     video = base64.b64decode(html_str[start:end])
     st.video(video)
     
+    """
+    This correlation heatmap shows use the correlation of each variable with respect to all the others. As we can see some variables are highlt correlated between each others. However, most variables are uncorrelated.
+
+    ❗Note that the correlated variables won't be taken into account for the Machine and Deep learning part of our study.
+    """
     corr = v_news.corr()
     fig = px.imshow(corr,color_continuous_scale='RdBu_r', text_auto=True)
     st.plotly_chart(fig)
@@ -731,7 +796,7 @@ def page5():
 
 page_names_to_funcs = {
     "Overview":main_page ,
-    "Data preprocess/discovery": page2,
+    "Data discovery": page2,
     "Improve your article": page3,
     "Machine learning/ Deep learning": page4,
     "Predict your success": page5,
