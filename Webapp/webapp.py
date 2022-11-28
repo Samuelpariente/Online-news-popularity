@@ -33,7 +33,7 @@ from bokeh.plotting import figure, show
 
 from collections import OrderedDict
 
-online = False
+online = True
 
 if online== True: 
     illustration1 = 'Webapp/illustration1.PNG'
