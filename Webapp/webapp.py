@@ -22,6 +22,7 @@ import seaborn as sns
 from bokeh.palettes import Spectral5
 from bokeh.palettes import PRGn7
 from bokeh.palettes import Magma7
+from bokeh.palettes import Magma10
 from bokeh.palettes import Viridis
 from bokeh.palettes import Pastel2_7
 from bokeh.palettes import Purples9
@@ -254,7 +255,7 @@ def page2():
                toolbar_location=None, tools="hover", tooltips="@weekday: @counts")
     
     p.vbar(x='weekday', top='counts', width=0.9, source=source, 
-           line_color='white', fill_color=factor_cmap('weekday', palette=PRGn7, factors=index))
+           line_color='white', fill_color=factor_cmap('weekday', palette=Magma7, factors=index))
     
     p.xgrid.grid_line_color = None
     st.bokeh_chart(p)
@@ -262,12 +263,15 @@ def page2():
     st.markdown("##### Repartition of Main topics amongst Mashable articles.")
     st.markdown("The spiderplot bellow shows us the <ins>Business</ins>, <ins>World</ins>, <ins>Tech</ins> and <ins>Entertainement</ins> are the **4 most common topics** on Mashable.", unsafe_allow_html=True)
     chanel = v_news.groupby(by="Chanel").Chanel.count()
-    
+
     fig = go.Figure(data=go.Scatterpolar(
       r=chanel.values,
       theta=chanel.index,
       fill='toself',
-      name='Frequencies of Chanels'
+      name='Frequencies of Chanels',
+      marker_color=Magma7[2], 
+      line_color = Magma7[2],
+      marker_line_color="black",
     ))
     
     fig.update_layout(
@@ -278,11 +282,14 @@ def page2():
       },
       polar=dict(
         radialaxis=dict(
-          visible=True
+          visible=True, 
         ),
       ),
-      showlegend=False
+      showlegend=False, 
+      
     )
+
+
     st.plotly_chart(fig)
     
   
@@ -291,10 +298,16 @@ def page2():
     
     autnb = v_news.groupby('Authors').count()['Titles'].sort_values(ascending = False)[:10]
     autnb =autnb.reset_index()
+    pie_values=autnb["Titles"]
+    pie_labels=autnb["Authors"]
+    explode = [0.1 if i == 0 else 0 for i in range(10)]
     
+    fig1, ax1 = plt.subplots()
     
-    fig = px.sunburst(autnb, path=['Authors'], values = 'Titles',title = "TOP 10 des acteurs ayant joué dans le plus de genres différents")
-    st.plotly_chart(fig)
+    ax1.pie(pie_values,  labels=pie_labels,
+            shadow=True, startangle=0, colors=Magma10, explode=explode)
+    plt.title("10 Most prolific Authors on Mashable")
+    st.pyplot()
     
     
     
@@ -325,7 +338,7 @@ def page2():
     """
     Plotting all of our 62 variables wouldn't have been much insightfull. In this context, we chose to plot the totality of our quantitatives variables. We used these graphs as a reference during our work, in the event where we require the distribution of a specific variable.
     """
-    v_news.hist(figsize=(20,20))
+    v_news.hist(figsize=(20,20), color=Magma7[2])
     st.pyplot()
     
     
@@ -356,13 +369,19 @@ def page2():
     }
     colors = v_news["Chanel"].map(map_colors)
     
-    fig = px.scatter_3d(x=pca_values[:200, 0], y=pca_values[:200, 1], z=pca_values[:200, 2],
-                  color = lda["Chanel"].head(200), opacity=0.7)
-            
     # tight layout
+    fig = px.scatter_3d(x=pca_values[:200, 0], y=pca_values[:200, 1], z=pca_values[:200, 2],
+              color = lda["Chanel"].head(200), opacity=0.7, color_discrete_sequence=Magma7)
+        
+
     fig.update_layout(
         margin=dict(l=0, r=0, b=0, t=0),
-        legend_title="Chanels"
+        legend_title="Chanels", 
+        title={
+        'text': "3D plot of articles in PCA reduced LDA topics space", 
+          'y': 0.9,
+          'x': 0.45
+        }
     )
     
     st.markdown("## Proximity of chanels")
