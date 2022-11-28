@@ -42,7 +42,7 @@ if online== True:
     multiTimeline='Webapp/multiTimeline.csv'
     Mlogo = 'Webapp/Mlogo.png'
     OnlineNewsPopularityWithAutorsAndTitles= 'Webapp/OnlineNewsPopularityWithAutorsAndTitles.csv'
-    race = "Webapp/race.mp4"
+    race = "Webapp/Race.mp4"
     
 if online  == False: 
     illustration1 = 'illustration1.PNG'
