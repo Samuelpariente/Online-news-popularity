@@ -471,9 +471,16 @@ def page3():
     st.pyplot()
     
     
-    
-    fig = px.histogram(v_news, x="global_sentiment_polarity", y="shares", color="Chanel", color_discrete_sequence=Magma7, title = "Global sentiment polarity with respect to the number of shares")
-    st.plotly_chart(fig)
+    genre = st.radio(
+    "Numbers of classes: ",
+    ('2 classes', '4 classes'))
+
+    if genre == '4 classes':    
+        fig = px.histogram(v_news, x="global_sentiment_polarity", y="shares", color="Class_shares2", color_discrete_sequence=Magma7, title = "Global sentiment polarity with respect to the number of shares")
+        st.plotly_chart(fig)
+    else:
+        fig = px.histogram(v_news, x="global_sentiment_polarity", y="shares", color="Class_shares1", color_discrete_sequence=Magma7, title = "Global sentiment polarity with respect to the number of shares")
+        st.plotly_chart(fig)
     """
     From these graphs, we conclude that articles with more positive polarity tend to be more appreciated. (biased interpretation)
     """
@@ -678,9 +685,70 @@ def page3():
     st.plotly_chart(fig)
     
 def page4():
-    st.markdown("# Page 3 🎉")
-    st.sidebar.markdown("# Page 3 🎉")
+    st.markdown("## 4 - Prediction")
+    s = """ The following section aims at predicting the success of an article in the most precise way possible. To do so, we will use multiple types of prediction algorithms. We will use 2 class of algorithms, **Machine Learning** and **Deep Learnin** ones. Amongst them, We find **classification** and **regression** algorithms that we will both use as well. In addition, we will use the Auto-Sklearn library to maximize our result.    
 
+    ⚙ Auto-sklearn is a program that tries multiple algorithms from sk-learn library. You input the amount of time that you allow the autoMl to run for, you also input the type of algorithm that you desire (Regression or Classificaition). In the end, the program will output a list of its best found Machine Learning models with the best found hyperparameters for each one.
+    
+    ⚡Each Algorithm's functionning is detailed in its own subpart. 
+    
+    ***
+    ***
+    
+    I. Machine Learning
+    
+    1. Regression
+    - First, we compute an AutoML computation with Auto-Sklearn library. 
+    - The AutoML indicates that <ins>ARDRegression</ins> is the most fitted model. Consequently, we compute an ARDRegression with a grid Search of our own.
+    - 🥇 : 
+    
+    ***
+    2. Binary Classification (Low or High)
+    - Similarly to the regression part, we compute an AutoML.
+    - <ins>Gradient Boosting</ins>, <ins>AdaBoost</ins> and <ins>Random Forest</ins> stand out as the **best Binary Classification algorihtms**. So we compute them independently from the AutoML with a targeted grid search. 
+    - In addition, we deploy a <ins>KNN</ins> algorithm to evalutate its performances.
+    - 🥇 :
+    
+    ***
+    
+    3. Quantile Classification (Very Low, Low, High, Very High)
+    - This subsection is very similary to the binary classification in terms of the method we use. 
+    - After computing the AutoML, we find out that <ins>HistogramGradientBoosting</ins> and <ins>Random Forest</ins> are the two most appropriate algorithms for this classification.
+    - 🥇 : 
+    
+    ***
+    
+    4. Clustering
+    - Unlike the previous algorithms we computed, clustering is part of the  unsupervised learning class of Machine Learning algorithms.  
+    - We compute a PCA (Principal Component Analysis) and TNSE (Tense classification) transformation.
+    - After that, we compute a K-mean to then visualize our clusterized data.
+    
+    ***
+    ***
+    
+    II. Deep Learning
+    
+    1. Regression Neural Network
+    - We use a Keras Sequential neural network to compute a regression on our data. To make it work, we mostly use Dense neural layers with Relu activation (Rectified Linear Unit). Only the last layer doesn't have and activation function because it is the output layer.
+    - 🥇 : <ins>Best Mean Absolute error</ins> on the test set was **1650**.
+    
+    ***
+    
+    2. Binary Classification Neural Network (Low or High)
+    - As for Regression we use a Keras Sequential network. However this time, the output layer has to be sigmoid and contains 2 neurons because the input was One hot encoded on 2 columns.
+    - 🥇 : <ins>Best Accuracy</ins> on the test set was **61.3%**.
+    
+    ***
+    
+    3. Quantile Classification Neural Network (Very Low, Low, High, Very High)
+    - Finally the quantile classification differs from the binary one because we use a SotfMax output layer containing 4 neurones.
+    - 🥇 : <ins>Best Accuracy</ins> on the test set was **36.1%**
+        
+    """
+    st.markdown(s, unsafe_allow_html=True)
+    
+    
+    
 def page5():
     st.title('Live Prediction')
     
