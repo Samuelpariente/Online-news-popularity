@@ -23,6 +23,7 @@ from bokeh.palettes import Spectral5
 from bokeh.palettes import PRGn7
 from bokeh.palettes import Magma7
 from bokeh.palettes import Magma10
+from bokeh.palettes import Magma6
 from bokeh.palettes import Viridis
 from bokeh.palettes import Pastel2_7
 from bokeh.palettes import Purples9
@@ -42,7 +43,7 @@ if online== True:
     multiTimeline='Webapp/multiTimeline.csv'
     Mlogo = 'Webapp/Mlogo.png'
     OnlineNewsPopularityWithAutorsAndTitles= 'Webapp/OnlineNewsPopularityWithAutorsAndTitles.csv'
-    race = "Webapp/Race.mp4"
+    race = "Webapp/race.mp4"
     
 if online  == False: 
     illustration1 = 'illustration1.PNG'
@@ -408,10 +409,16 @@ def page2():
     
 def page3():
     st.set_option('deprecation.showPyplotGlobalUse', False)
-    st.markdown("## 3 - Recipe for the perfect article ")
-    st.sidebar.markdown("## 3 - Recipe for the perfect article \n In this section we gonna study the best parameters to improve your article ")
+    """
+    ## 3 - How to improve your articles ?
     
+    ##### Average polarity and subjectivity, how they interact and affect shares of a given article
     
+    The 3 graphics that follows, 2 heatmap and 1 histogram, consist of insights about the link between the emotion put in an article, its subjectivity and how its affects the shares of the article.
+
+    ***
+    We notice that the the most shared articles has a medium subjectivity (around 0.4 to 0.5) and are either slightly positive of negative regarding their content. However, based on the third graph, we can infer that **positive articles are most likely to be shared a lot**.
+    """
     pol_subj_wr_shares = v_news[["global_subjectivity", "avg_positive_polarity", "avg_negative_polarity", "shares"]]
 
     discrete_pol_subj_wr_shares = pd.DataFrame()
@@ -462,8 +469,15 @@ def page3():
     plt.suptitle("Subjectivity, polarity and their effects on shares", size = 25)
     st.pyplot()
     
-    fig = px.histogram(v_news, x="global_sentiment_polarity", y="shares", color="Class_shares2", color_discrete_sequence=Magma7)
+    
+    
+    fig = px.histogram(v_news, x="global_sentiment_polarity", y="shares", color="Chanel", color_discrete_sequence=Magma7, title = "Global sentiment polarity with respect to the number of shares")
     st.plotly_chart(fig)
+    """
+    From these graphs, we conclude that articles with more positive polarity tend to be more appreciated. (biased interpretation)
+    """
+    st.markdown("##### Number of shares per author and type of article")
+    st.markdown("The graph that you will find bellow aims at looking at the repartition of chanels' articles of the most shared authors so as to understand what subjects are more likeky to get you great amounts of shares. it appears that the <ins>key of famous authors</ins> is to create articles in multiple chanels to **diversify their content**.", unsafe_allow_html=True)
     
     n_shares_wr_author_chanel = pd.pivot_table(v_news, 
                                            index="Authors", 
@@ -477,16 +491,21 @@ def page3():
     
     fig = px.bar(top10_n_shares_wr_author_chanel, height=400,
                  color_discrete_sequence=Magma7, 
-                 title="Number of shares per author and types of articles written")
+                 title="Number of shares per author and types of articles written") 
     st.plotly_chart(fig)
     
+    """
+    ##### Shares with respect to day of release
+    The following graph shows the amount of shares with respect to the day of the week.
+    Source for the graph : https://www.python-graph-gallery.com/web-circular-barplot-with-matplotlib
+    """
     week_ref = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     dor = v_news[["Weekday", "shares"]].groupby(by="Weekday").sum().reindex(week_ref)
-    means_5000 = (v_news[["Weekday", "shares"]].groupby(by="Weekday").mean().values * 5000)
+    means_5000 = (v_news[["Weekday", "shares"]].groupby(by="Weekday").mean().values * 2500)
     
     angles = np.linspace(0.05, 2 * np.pi - 0.05, dor.shape[0], endpoint=False)
     
-    GREY12 = "#1f1f1f"
+    GREY12 = "#808080"
     plt.rcParams.update({"font.family": "Bell MT"})
     
     plt.rc("axes", unicode_minus=False)
@@ -494,18 +513,18 @@ def page3():
     f.patch.set_facecolor("white")
     ax.set_facecolor("white")
     ax.set_theta_offset(1.2 * np.pi / 2)
-    ax.set_ylim(-10000000, 28000000)
+    ax.set_ylim(-5000000, 12000000)
     
     ax.bar(angles,
            dor["shares"],
            width=0.80,
-           color = Pastel2_7,
+           color = Magma7,
            alpha = 0.9,
            zorder=10)
     
     ax.vlines(angles, 
               0, 
-              25000000, 
+              12000000, 
               color=GREY12, 
               ls=(0, (4, 4)), 
               zorder=11)
@@ -524,28 +543,39 @@ def page3():
     
     ax.set_xticks(angles)
     ax.set_yticklabels([])
-    ax.set_yticks([0, 5000000, 10000000, 15000000, 20000000, 25000000])
+    ax.set_yticks([0, 4000000, 8000000, 12000000])
     
     XTICKS = ax.xaxis.get_major_ticks()
     for tick in XTICKS:
         tick.set_pad(10)
     
     PAD = 10
-    ax.text(-0.3*np.pi / 2, 5000000 + PAD, "5M", ha="center", size=8)
-    ax.text(-0.3*np.pi / 2, 10000000 + PAD, "10M", ha="center", size=8)
-    ax.text(-0.3*np.pi / 2, 15000000 + PAD, "15M", ha="center", size=8)
-    ax.text(-0.3*np.pi / 2, 20000000 + PAD, "20M", ha="center", size=8)
+    ax.text(-0.3*np.pi / 2, 4000000 + PAD, "5M", ha="center", size=12)
+    ax.text(-0.3*np.pi / 2, 8000000 + PAD, "10M", ha="center", size=12)
+    ax.text(-0.3*np.pi / 2, 12000000 + PAD, "15M", ha="center", size=12)
     
     ax.set_xticklabels(week_ref, size=12);
+    _=plt.title("BarPlot of shares with respect to the day of the week")
     st.pyplot()
     
+    """
+    ##### How additionnal medias (links, images and videos) affect shares
+    The 3 following heatmap tend to indicate what are the optimal numbers of medias to include in your article. 
+
+    From this study, the optimal parameters seem to be :
+    - Between 3 and 5 hyperlinks.
+    - No images.
+    - No videos.
+    
+    ❗this result may be biased because there are less articles with videos and images on mashable.com
+    """
     
     img_vid_wr_shares = v_news[["num_hrefs", "num_imgs", "num_videos", "shares"]]
     table1_img_vid_wr_shares = pd.pivot_table(img_vid_wr_shares,
-                                          index="num_hrefs", 
-                                          columns="num_imgs", 
-                                          values="shares", 
-                                          aggfunc="sum").fillna(0)
+                                              index="num_hrefs", 
+                                              columns="num_imgs", 
+                                              values="shares", 
+                                              aggfunc="sum").fillna(0)
     
     fig1 = px.density_heatmap(img_vid_wr_shares, 
                    x="num_hrefs", 
@@ -586,7 +616,11 @@ def page3():
     st.plotly_chart(fig1)
     st.plotly_chart(fig2)
     st.plotly_chart(fig3)
-
+    """
+    ##### Number of shares with respect of topic
+    
+    """
+    st.markdown("Interpreting the barplot that follows, we notice that all chanels are relatively close in terms of numbers of shares. However, <ins>Lifestyle</ins> and <ins>Social Media</ins> chanels seem to be sightly dominant.",unsafe_allow_html=True)
     df = pd.DataFrame()
     df['chanel'] = v_news["Chanel"]
     df['shares'] = v_news['shares']
@@ -596,9 +630,18 @@ def page3():
     df['shares_nb'] = df['shares']/df['count']
     df = df.drop(labels=3, axis=0)
     
-    fig = px.bar(df, x='chanel', y='shares_nb', color = 'chanel') 
+    fig = px.bar(df, x='chanel', y='shares_nb', color = 'chanel', color_discrete_sequence=Magma6)
     st.plotly_chart(fig)
     
+    """
+    ##### Length of Titles with respect to shares
+    
+    Given the study on the title's length of articles we infer that the ideal title should :
+    - Be 4 to 17 words long (even if the difference isn't immense when titles aren't in this range).
+    - Contain words between 6 to 15 characters. However, the complexity of the word doesn't seem to affect the number of shares in a tremendous manner so **come as you are** as far as the title's vocabulary is concerned.
+    
+    ❗In this part, we suppose that the length of a word is correlated to its complexity. Consequently, we may analyze the result of the subsection through the complexity aspect.
+    """
     
     df = pd.DataFrame()
     df['shares'] = v_news['shares'] 
@@ -608,10 +651,16 @@ def page3():
     df['count'] = df2['shares']
     df['shares_nb'] = df['shares']/df['count']
     
-    fig = px.bar(df, x='lentitle', y='shares_nb')
+    fig = px.bar(df, x='lentitle', y='shares_nb', title="Shares with respect to the Bar plot of the length of Titles")
+    fig.update_traces(marker_color=Magma7[2])
     st.plotly_chart(fig)
-    fig = px.scatter(v_news, x='n_tokens_content', y='shares',color = 'Chanel',trendline='ols')
-    st.plotly_chart(fig)
+    
+    """
+    ##### Length of bodies with respect to shares
+    """
+    st.markdown("In the section, we find out that the optimal length is between <ins>1000 and 3000 words long</ins>. Most articles fall in this category and the amount of shares seems to follow through !",unsafe_allow_html=True)
+    
+    
     df = pd.DataFrame()
     df['shares'] = v_news['shares'] 
     df['lencorpus'] = v_news['n_tokens_content']
@@ -621,6 +670,10 @@ def page3():
     df['shares_nb'] = df['shares']/df['count']
     
     fig = px.scatter(df, x='lencorpus', y='shares_nb',trendline='ols')
+    fig.update_traces(marker_color=Magma7[2])
+    st.plotly_chart(fig)
+    
+    fig = px.scatter(v_news, x='n_tokens_content', y='shares',color = 'Chanel',trendline='ols', color_discrete_sequence=Magma7, title="Scatter plot of shares with respect to the chanel and the amount of words in the article's body")
     st.plotly_chart(fig)
     
 def page4():
