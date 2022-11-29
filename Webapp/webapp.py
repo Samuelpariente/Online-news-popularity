@@ -43,7 +43,7 @@ if online== True:
     multiTimeline='Webapp/multiTimeline.csv'
     Mlogo = 'Webapp/Mlogo.png'
     OnlineNewsPopularityWithAutorsAndTitles= 'Webapp/OnlineNewsPopularityWithAutorsAndTitles.csv'
-    race = "Webapp/race.mp4"
+    race = "Webapp/Race.mp4"
     
 if online  == False: 
     illustration1 = 'illustration1.PNG'
@@ -228,6 +228,7 @@ df.to_csv('OnlineNewsPopularityWithAutorsAndTitles.csv')
     
     
 def page2():
+    st.set_option('deprecation.showPyplotGlobalUse', False)
     st.markdown("# Data discovery ")
     st.sidebar.markdown("Data discovery ")
     """
