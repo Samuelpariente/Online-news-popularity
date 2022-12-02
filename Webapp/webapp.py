@@ -44,9 +44,9 @@ if online== True:
     Mlogo = 'Webapp/Mlogo.png'
     OnlineNewsPopularityWithAutorsAndTitles= 'Webapp/OnlineNewsPopularityWithAutorsAndTitles.csv'
     race = "Webapp/Race.mp4"
-    ada = "graph ada grad class2.png"
-    hist = "graph Hist grad class2.png"
-    adareg = "learning curv ada.png"
+    ada = "Webapp/graph/graph ada grad class2.png"
+    hist = "Webapp/graph/graph Hist grad class2.png"
+    adareg = "Webapp/graph/learning curv ada.png"
     knn = "Webapp/graph/Knn.png"
     deep1 = "Webapp/graph/deep1.png"
     deep2 = "Webapp/graph/deep2.png"
