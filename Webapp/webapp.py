@@ -34,6 +34,7 @@ from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure, show
 
 from collections import OrderedDict
+import streamlit.components.v1 as components
 
 online = True
 
@@ -55,6 +56,7 @@ if online== True:
     tnse = "Webapp/graph/TSNE.png"
     cluster = "Webapp/graph/cluster.png"
     result = "Webapp/result.csv"
+    best = "Webapp/graph/best.html"
 
 if online  == False: 
     illustration1 = 'illustration1.PNG'
@@ -232,19 +234,23 @@ df.to_csv('OnlineNewsPopularityWithAutorsAndTitles.csv')
       - The first one is the visualization dataframe, "v_news". It doesn't contain 1 hot encoded variables, or vectorized ones. 
       - The second one, named "m_news" and created for modeling purposes, has only numerical columns, encompassing vectorized and 1 hot encoded columns. In addition, we remove non predictive columns from it, such as timedelta. Finally, we only keep columns that are less than 70% percent correlated with others.
 
-    
-    
+    """
+    components.html(best)
+    """
     6. **3 predictable Variables**
     """
-
-    fig = px.histogram(v_news, x="Class_shares1")
+    
+    fig = px.histogram(v_news, x="shares", color_discrete_sequence = [Magma7[2]], 
+             title = "Continuous shares distribution")
     st.plotly_chart(fig)
 
-    fig = px.histogram(v_news, x="Class_shares2")
+    fig =px.histogram(v_news, x="Class_shares1", color_discrete_sequence = [Magma7[2]], 
+             title = "Binary discretized shares distribution")
     st.plotly_chart(fig)
     
 
-    fig = px.histogram(v_news, x="shares")
+    fig = px.histogram(v_news, x="Class_shares2", color_discrete_sequence = [Magma7[2]], 
+             title = "Quantile discretized shares distribution")
     st.plotly_chart(fig)
       
     
