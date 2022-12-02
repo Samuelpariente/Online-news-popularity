@@ -56,7 +56,7 @@ if online== True:
     tnse = "Webapp/graph/TSNE.png"
     cluster = "Webapp/graph/cluster.png"
     result = "Webapp/result.csv"
-    best = "Webapp/graph/best.html"
+    best = "Webapp/graph/best.png"
 
 if online  == False: 
     illustration1 = 'illustration1.PNG'
@@ -235,7 +235,7 @@ df.to_csv('OnlineNewsPopularityWithAutorsAndTitles.csv')
       - The second one, named "m_news" and created for modeling purposes, has only numerical columns, encompassing vectorized and 1 hot encoded columns. In addition, we remove non predictive columns from it, such as timedelta. Finally, we only keep columns that are less than 70% percent correlated with others.
 
     """
-    components.html(best)
+    st.image(best)
     """
     6. **3 predictable Variables**
     """
