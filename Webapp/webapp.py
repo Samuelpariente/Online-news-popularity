@@ -54,7 +54,7 @@ if online== True:
     deep4 = "Webapp/graph/deep4.png"
     tnse = "Webapp/graph/TSNE.png"
     cluster = "Webapp/graph/cluster.png"
-    result = "Webapp/graph/result.csv"
+    result = "Webapp/result.csv"
 
 if online  == False: 
     illustration1 = 'illustration1.PNG'
