@@ -87,9 +87,22 @@ def couleur(*args, **kwargs):
         if i > 10:
             return "rgb(0, 0, 0)"
 def library():
-    st.markdown("# Libraries ")
+    st.markdown("#To go further  ")
     """
-    In this section we load all the libraries we need for the notebook to be working properly. Here is the extensive list of utilized libraries :
+    # Improve the Dataset 
+    
+    While creating a predictive model for the number of shares per article (discrete or continuous), we have been processing the data to get the most correct prediction possible. We went through outlier management, intelligent selection of study variables, creation of a new variable, as well as vectorization of one of the qualitative classes.  Then we studied several models that give us an accuracy of 67.3% for the binary prediction, 40.3% for the 4 class prediction and 11% for the regression.  
+    We can therefore question the quality of the data. First, a variable that could explain these results is the health of the Mashable website. The number of shares is very correlated with this information and even if we managed to retrieve some information from google trend, it is not precise enough to take it into account. 
+
+    # thank you
+    
+    We would like to thank our Python for Data Analysis teacher SABRY Abdellah for his excellent advice throughout the project
+    
+    
+    
+    
+    
+    libraries :
 
     - **Data Analysis libraries** :
       - Datetime
@@ -123,7 +136,6 @@ def library():
     
 def main_page():
     st.markdown("# Overview ")
-    st.sidebar.markdown("# Overview")
     st.markdown("## Datasets ")
     """
     In the context of our project we studied the online-news-popularity dataset of mashable articles. Our project contains 2 csv datasets loaded in this section :
@@ -256,7 +268,6 @@ df.to_csv('OnlineNewsPopularityWithAutorsAndTitles.csv')
 def page2():
     st.set_option('deprecation.showPyplotGlobalUse', False)
     st.markdown("# Data discovery ")
-    st.sidebar.markdown("Data discovery ")
     """
     This section is dedicated to understanding how our data behaves through mutliple graphs. Our work in this part can be split in two categories :
 
