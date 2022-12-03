@@ -15,12 +15,9 @@ from wordcloud import WordCloud
 from PIL import Image
 import numpy as np
 from sklearn.decomposition import PCA
-import bar_chart_race as bcr
-import base64
 import seaborn as sns
 
-from bokeh.palettes import Spectral5
-from bokeh.palettes import PRGn7
+
 from bokeh.palettes import Magma7
 from bokeh.palettes import Magma10
 from bokeh.palettes import Magma6
@@ -76,8 +73,10 @@ if online  == False:
     tnse = "TSNE.png"
     cluster = "cluster.png"
     result = "result.csv"
+    best = "best.png"
 
 res = pd.read_csv(result)
+magmaS = ['#000003','#2B115E', '#3B0F6F', '#8C2980', '#DD4968', '#FD9F6C', '#FBFCBF']
 v_news = pd.read_csv(v_news)
 i = 0
 def couleur(*args, **kwargs):
@@ -134,7 +133,7 @@ def main_page():
       - Base dataset 
     """
     news = pd.read_csv(OnlineNewsPopularityWithAutorsAndTitles)
-    news
+    news.iloc[0:5]
     """
     
     - **Timeline Dataset**
@@ -240,7 +239,7 @@ df.to_csv('OnlineNewsPopularityWithAutorsAndTitles.csv')
     6. **3 predictable Variables**
     """
     
-    fig = px.histogram(v_news, x="shares", color_discrete_sequence = [Magma7[2]], 
+    fig = px.histogram(v_news, x="shares",nbins = 50, color_discrete_sequence = [Magma7[2]], 
              title = "Continuous shares distribution")
     st.plotly_chart(fig)
 
@@ -503,10 +502,10 @@ def page3():
     ('2 classes', '4 classes'))
 
     if genre == '4 classes':    
-        fig = px.histogram(v_news, x="global_sentiment_polarity", y="shares", color="Class_shares2", color_discrete_sequence=Magma7, title = "Global sentiment polarity with respect to the number of shares")
+        fig = px.histogram(v_news, x="global_sentiment_polarity", y="shares", color="Class_shares2", color_discrete_sequence=magmaS[:4], title =  "Global sentiment polarity with respect to the number of shares")
         st.plotly_chart(fig)
     else:
-        fig = px.histogram(v_news, x="global_sentiment_polarity", y="shares", color="Class_shares1", color_discrete_sequence=Magma7, title = "Global sentiment polarity with respect to the number of shares")
+        fig = px.histogram(v_news, x="global_sentiment_polarity", y="shares", color="Class_shares1", color_discrete_sequence=magmaS[:2], title = "Global sentiment polarity with respect to the number of shares")
         st.plotly_chart(fig)
     """
     From these graphs, we conclude that articles with more positive polarity tend to be more appreciated. (biased interpretation)
@@ -525,7 +524,7 @@ def page3():
     top10_n_shares_wr_author_chanel = n_shares_wr_author_chanel.head(10)
     
     fig = px.bar(top10_n_shares_wr_author_chanel, height=400,
-                 color_discrete_sequence=Magma7, 
+                 color_discrete_sequence=magmaS, 
                  title="Number of shares per author and types of articles written") 
     st.plotly_chart(fig)
     
@@ -553,7 +552,7 @@ def page3():
     ax.bar(angles,
            dor["shares"],
            width=0.80,
-           color = Magma7,
+           color = magmaS,
            alpha = 0.9,
            zorder=10)
     
@@ -665,7 +664,7 @@ def page3():
     df['shares_nb'] = df['shares']/df['count']
     df = df.drop(labels=3, axis=0)
     
-    fig = px.bar(df, x='chanel', y='shares_nb', color = 'chanel', color_discrete_sequence=Magma6)
+    fig = px.bar(df, x='chanel', y='shares_nb', color = 'chanel', color_discrete_sequence=magmaS)
     st.plotly_chart(fig)
     
     """
@@ -708,7 +707,7 @@ def page3():
     fig.update_traces(marker_color=Magma7[2])
     st.plotly_chart(fig)
     
-    fig = px.scatter(v_news, x='n_tokens_content', y='shares',color = 'Chanel',trendline='ols', color_discrete_sequence=Magma7, title="Scatter plot of shares with respect to the chanel and the amount of words in the article's body")
+    fig = px.scatter(v_news, x='n_tokens_content', y='shares',color = 'Chanel',trendline='ols', color_discrete_sequence=magmaS, title="Scatter plot of shares with respect to the chanel and the amount of words in the article's body")
     st.plotly_chart(fig)
     
 def page4():
