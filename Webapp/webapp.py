@@ -94,9 +94,16 @@ def library():
     While creating a predictive model for the number of shares per article (discrete or continuous), we have been processing the data to get the most correct prediction possible. We went through outlier management, intelligent selection of study variables, creation of a new variable, as well as vectorization of one of the qualitative classes.  Then we studied several models that give us an accuracy of 67.3% for the binary prediction, 40.3% for the 4 class prediction and 11% for the regression.  
     We can therefore question the quality of the data. First, a variable that could explain these results is the health of the Mashable website. The number of shares is very correlated with this information and even if we managed to retrieve some information from google trend, it is not precise enough to take it into account. 
 
-    ### Thank you
-    
+    ### Live prediction on article text
+
+    Finally, it would be interesting to create a NLP model combined with our prediction model. Thus, the user could write directly his article in the web app and have an instant prediction of the quality of his article with advice to improve it.
+
+    ### Thank you section    
+
     We would like to thank our Python for Data Analysis teacher SABRY Abdellah for his excellent advice throughout the project
+    
+    
+
     
     
     ### libraries :
@@ -432,6 +439,25 @@ def page2():
     
     video = open(race, 'rb').read()
     st.video(video)
+    """
+    ##### Most famous publishers and their most famous articles
+    """
+    
+    df = v_news
+    final = pd.DataFrame()
+    df2 = df.groupby('Authors').count()['Titles'].to_dict()
+    df['count'] = df['Authors'].map(df2)
+    df = df.sort_values('count',ascending=False)
+    aut = df['Authors'].unique()[:10]
+    for x in aut:
+      temp = df[df['Authors']== x]
+      final = pd.concat([final,temp.iloc[:3]])
+    final = final[['Authors','Titles','count']]
+    
+    fig = px.sunburst(final, path=['Authors', 'Titles'], values='count', color_discrete_sequence=Magma10, 
+                      title = "Sunburst of the most famous publishers and their 3 most shared articles")
+    st.plotly_chart(fig)
+    
     
     """
     This correlation heatmap shows use the correlation of each variable with respect to all the others. As we can see some variables are highlt correlated between each others. However, most variables are uncorrelated.
