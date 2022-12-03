@@ -525,7 +525,7 @@ def page3():
     top10_n_shares_wr_author_chanel = n_shares_wr_author_chanel.head(10)
     
     fig = px.bar(top10_n_shares_wr_author_chanel, height=400,
-                 color_discrete_sequence=Magma7, 
+                 color_discrete_sequence=Magma9, 
                  title="Number of shares per author and types of articles written") 
     st.plotly_chart(fig)
     
