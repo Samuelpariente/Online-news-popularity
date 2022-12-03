@@ -87,22 +87,19 @@ def couleur(*args, **kwargs):
         if i > 10:
             return "rgb(0, 0, 0)"
 def library():
-    st.markdown("#To go further  ")
+    st.markdown("# To go further  ")
     """
-    # Improve the Dataset 
+    ### Improve the Dataset 
     
     While creating a predictive model for the number of shares per article (discrete or continuous), we have been processing the data to get the most correct prediction possible. We went through outlier management, intelligent selection of study variables, creation of a new variable, as well as vectorization of one of the qualitative classes.  Then we studied several models that give us an accuracy of 67.3% for the binary prediction, 40.3% for the 4 class prediction and 11% for the regression.  
     We can therefore question the quality of the data. First, a variable that could explain these results is the health of the Mashable website. The number of shares is very correlated with this information and even if we managed to retrieve some information from google trend, it is not precise enough to take it into account. 
 
-    # thank you
+    ### Thank you
     
     We would like to thank our Python for Data Analysis teacher SABRY Abdellah for his excellent advice throughout the project
     
     
-    
-    
-    
-    libraries :
+    ### libraries :
 
     - **Data Analysis libraries** :
       - Datetime
@@ -155,7 +152,7 @@ def main_page():
     """
 
     timeline = pd.read_csv(multiTimeline)
-    timeline
+    timeline.iloc[0:5]
     
     st.markdown("## Data Pre-processing ")
     """
