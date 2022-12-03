@@ -76,7 +76,7 @@ if online  == False:
     best = "best.png"
 
 res = pd.read_csv(result)
-magmaS = ['#000003','#2B115E', '#3B0F6F', '#8C2980', '#DD4968', '#FD9F6C', '#FBFCBF']
+magmaS = ['#000000','#2B115E', '#3B0F6F', '#8C2980', '#DD4968', '#FD9F6C', '#FBFCBF']
 v_news = pd.read_csv(v_news)
 i = 0
 def couleur(*args, **kwargs):
