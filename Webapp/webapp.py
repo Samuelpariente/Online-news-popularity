@@ -399,7 +399,7 @@ def page2():
     
     # tight layout
     fig = px.scatter_3d(x=pca_values[:200, 0], y=pca_values[:200, 1], z=pca_values[:200, 2],
-              color = lda["Chanel"].head(200), opacity=0.7, color_discrete_sequence=Magma7)
+              color = lda["Chanel"].head(200), opacity=0.7, color_discrete_sequence=magmaS)
         
 
     fig.update_layout(
