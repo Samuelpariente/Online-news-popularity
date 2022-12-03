@@ -1226,7 +1226,7 @@ page_names_to_funcs = {
     "Improve your article": page3,
     "Machine learning/ Deep learning": page4,
     "Predict your success": page5,
-    "Libraries": library
+    "To go further  ": library
 }
 
 selected_page = st.sidebar.selectbox("Select a page", page_names_to_funcs.keys())
