@@ -1243,7 +1243,7 @@ def page5():
     
     if st.button('Predict !'):
         a = requests.get(info)
-        st.write('Your article gona whave '+a.text+' shares' )
+        st.write('You are going to have '+a.text+' shares' )
     
 
 page_names_to_funcs = {
