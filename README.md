@@ -1,6 +1,6 @@
 # Online-news-popularity - Complete study
 
-🔗 [Webapp](https://samuelpariente-online-news-popularity-webappwebapp-s3npdr.streamlit.app/)
+🔗 [Interative Report](https://samuelpariente-online-news-popularity-webappwebapp-s3npdr.streamlit.app/)
 
 ### 👨‍🔬 Our study's context and contributors
 
