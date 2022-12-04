@@ -1,5 +1,7 @@
 # Online-news-popularity - Complete study
 
+🔗 [Webapp](https://samuelpariente-online-news-popularity-webappwebapp-s3npdr.streamlit.app/)
+
 ### 👨‍🔬 Our study's context and contributors
 
 In the context of our 4th year python class's final project, we decided to study the Online-News Popularity Dataset.
@@ -20,7 +22,7 @@ Our work led to the creation of multiple documents, all accessible from this Git
 - [A notebook](https://github.com/Samuelpariente/Online-news-popularity/tree/main/Notebook%20version) : You can find in it the totality of our work on the dataset. All of our scientific procedures are detailed there.
 - [Improved Dataframes](https://github.com/Samuelpariente/Online-news-popularity/tree/main/Dataframes) : Given that we scrapped additional data from Mashable and internet in general, our base dataset has more columns than the initial one. We can mention <ins>Author's name</ins>, <ins>Title of the article</ins> or the <ins>website trafic</ins>.
 - [Powerpoint presentation](https://) : This powerpoint stands as a report to our teachers. We presented it as the final step of the project.
-- [interactive Webapp](https://samuelpariente-online-news-popularity-webappwebapp-s3npdr.streamlit.app/) : Deployed with Streamlit, this webapp is an handy way to introduce people to our work. In contains the same information as our notebook expect the code. In addition, the webapp has a __predict your success__ section that allows you to predict in real time the future of your article's popularity. To do so, it is linked to a API powered on AWS served and containing out most effective machine learning model. 
+- [Interactive Webapp](https://samuelpariente-online-news-popularity-webappwebapp-s3npdr.streamlit.app/) : Deployed with Streamlit, this webapp is an handy way to introduce people to our work. In contains the same information as our notebook expect the code. In addition, the webapp has a __predict your success__ section that allows you to predict in real time the future of your article's popularity. To do so, it is linked to a API powered on AWS served and containing out most effective machine learning model. 
 
 ### 🔍 The structure of the project
 
