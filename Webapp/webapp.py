@@ -464,9 +464,9 @@ def page2():
 
     ❗Note that the correlated variables won't be taken into account for the Machine and Deep learning part of our study.
     """
-    corr = v_news.corr()
-    fig = px.imshow(corr,color_continuous_scale='RdBu_r', text_auto=True)
-    st.plotly_chart(fig)
+    #corr = v_news.corr()
+    #fig = px.imshow(corr,color_continuous_scale='RdBu_r', text_auto=True)
+    #st.plotly_chart(fig)
     
 def page3():
     st.set_option('deprecation.showPyplotGlobalUse', False)
